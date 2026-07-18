@@ -6,7 +6,7 @@ const Works = () => {
 
       <div className="grid grid-cols-4 gap-4">
         {/* div 1 */}
-        <div className=" bg-gray-200 p-7 rounded-2xl">
+        <div className=" bg-gray-200 p-7 rounded-2xl hover:bg-[#CAEB66]">
           <img className="h-14" src={bike} alt="" />
           <h1 className="text-[#03373D] text-xl font-bold my-2">
             Booking Pick & Drop
@@ -17,7 +17,7 @@ const Works = () => {
           </p>
         </div>
         {/* div 2 */}
-        <div className="bg-gray-200 p-7 rounded-2xl">
+        <div className="bg-gray-200 p-7 rounded-2xl hover:bg-[#CAEB66]">
           <img className="h-14" src={bike} alt="" />
           <h1 className="text-[#03373D] text-xl font-bold my-2">
             Cash On Delivery
@@ -28,7 +28,7 @@ const Works = () => {
           </p>
         </div>
         {/* div 3 */}
-        <div className="bg-gray-200 p-7 rounded-2xl">
+        <div className="bg-gray-200 p-7 rounded-2xl hover:bg-[#CAEB66]">
           <img className="h-14" src={bike} alt="" />
           <h1 className="text-[#03373D] text-xl font-bold my-2">
             Delivery Hub
@@ -39,7 +39,8 @@ const Works = () => {
           </p>
         </div>
         {/* div 4 */}
-        <div className="bg-gray-200 p-7 rounded-2xl">
+        <div className="bg-gray-200 p-7 rounded-2xl hover:bg-[#CAEB66]
+        ">
           <img className="h-14" src={bike} alt="" />
           <h1 className="text-[#03373D] text-xl font-bold my-2">
             Booking SME & Corporate
