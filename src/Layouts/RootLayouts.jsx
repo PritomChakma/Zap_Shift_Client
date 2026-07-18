@@ -4,7 +4,7 @@ import Navbar from "../Pages/Shared/Navbar";
 
 const RootLayouts = () => {
   return (
-    <div>
+    <div className="md:w-11/12 mx-auto">
       <Navbar></Navbar>
       <div className="min-h-screen">
         <Outlet></Outlet>
