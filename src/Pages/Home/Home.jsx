@@ -1,4 +1,5 @@
 import Banner from "./Banner/Banner";
+import CustomerBanner from "./CustomerBanner/CustomerBanner";
 import Ddelivery from "./Delivery/Ddelivery";
 // import Brands from "./Brands/Brands";
 import Services from "./Services/Services";
@@ -12,6 +13,7 @@ const Home = () => {
       <Services></Services>
       {/* <Brands></Brands> */}
       <Ddelivery></Ddelivery>
+      <CustomerBanner></CustomerBanner>
     </div>
   );
 };
