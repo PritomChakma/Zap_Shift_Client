@@ -48,7 +48,7 @@ const CustomerSaying = () => {
       </div>
       {/* Card Section */}
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 my-10">
         {reviews.map((review) => (
           <div
             key={review.id}
