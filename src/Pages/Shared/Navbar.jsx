@@ -1,7 +1,18 @@
 import { Link, NavLink } from "react-router-dom";
+import UseAuth from "../../Hooks/UseAuth";
 import Logo from "./Logo/Logo";
 
 const Navbar = () => {
+  const { user, signLogout } = UseAuth();
+
+  const handleLogout = () => {
+    signLogout()
+      .then(() => {
+        console.log("Logout Success");
+      })
+      .catch((error) => console.log(error));
+  };
+
   const links = (
     <>
       <li>
@@ -21,9 +32,11 @@ const Navbar = () => {
       </li>
     </>
   );
+
   return (
-    <div>
-      <div className="navbar bg-base-100 shadow-sm">
+    <div className="shadow-sm">
+      <div className="navbar bg-base-100 max-w-7xl mx-auto">
+        {/* Left */}
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -34,33 +47,75 @@ const Navbar = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {" "}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M4 6h16M4 12h8m-8 6h16"
-                />{" "}
+                />
               </svg>
             </div>
+
             <ul
-              tabIndex="-1"
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               {links}
             </ul>
           </div>
-          <Link to="/" className="btn btn-ghost text-xl">
-            <Logo></Logo>
+
+          <Link to="/">
+            <Logo />
           </Link>
         </div>
+
+        {/* Center */}
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{links}</ul>
+          <ul className="menu menu-horizontal px-1 font-medium">{links}</ul>
         </div>
-        <div className="navbar-end flex gap-2">
-          <button className="btn">Sing in</button>
-          <button className="btn bg-[#CAEB66]">Be a Rider</button>
-          <i className="fa-solid fa-arrow-down "></i>
+
+        {/* Right */}
+        <div className="navbar-end gap-3">
+          {user ? (
+            <>
+              {/* Profile */}
+              <div
+                className="tooltip tooltip-bottom"
+                data-tip={user.displayName || "User"}
+              >
+                <div className="avatar">
+                  <div className="w-11 rounded-full ring ring-[#CAEB66] ring-offset-2">
+                    <img
+                      src={
+                        user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"
+                      }
+                      alt="profile"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="btn bg-red-500 hover:bg-red-600 text-white border-none rounded-xl"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              {/* Login */}
+              <Link to="/login" className="btn btn-outline rounded-xl">
+                Login
+              </Link>
+            </>
+          )}
+
+          {/* Rider Button */}
+          <button className="btn bg-[#CAEB66] hover:bg-lime-400 rounded-xl border-none">
+            Be a Rider
+          </button>
         </div>
       </div>
     </div>
