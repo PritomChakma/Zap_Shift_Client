@@ -1,36 +1,62 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import UseAuth from "../../../Hooks/UseAuth";
 import GoogleLogin from "../SignInGoogle/GoogleLogin";
 
 const Register = () => {
-  const { register, handleSubmit } = useForm();
-  const { registerUser } = UseAuth();
+  const { register, handleSubmit, reset } = useForm();
+
+  const { registerUser, updateUserProfile } = UseAuth();
+
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegister = (data) => {
-    console.log(data);
+  const handleRegister = async (data) => {
+    try {
+      // Image
+      const image = data.photo[0];
 
-    registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
-      })
-      .catch((error) => console.log(error));
+      const formData = new FormData();
+      formData.append("image", image);
+
+      const imageAPI = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`;
+
+      // Upload Image
+      const imageRes = await axios.post(imageAPI, formData);
+
+      if (!imageRes.data.success) {
+        return console.log("Image Upload Failed");
+      }
+
+      const photoURL = imageRes.data.data.display_url;
+
+      // Firebase Register
+      await registerUser(data.email, data.password);
+
+      // Update Profile
+      await updateUserProfile(data.name, photoURL);
+
+      console.log("Registration Successful");
+
+      reset();
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-
-        {/* Heading */}
         <div className="mb-7">
           <h1 className="text-4xl font-bold text-gray-800">
             Create Account 🚀
           </h1>
-
         </div>
 
         <form
@@ -40,14 +66,14 @@ const Register = () => {
           {/* Name */}
 
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium">
               Full Name
             </label>
 
             <input
               type="text"
               placeholder="Enter your name"
-              {...register("name")}
+              {...register("name", { required: true })}
               className="input input-bordered w-full mt-2 rounded-xl"
             />
           </div>
@@ -55,29 +81,29 @@ const Register = () => {
           {/* Photo */}
 
           <div>
-            <label className="text-sm font-medium text-gray-700">
-              Photo URL
+            <label className="text-sm font-medium">
+              Profile Photo
             </label>
 
             <input
-              type="text"
-              placeholder="Enter photo URL"
-              {...register("photo")}
-              className="input input-bordered w-full mt-2 rounded-xl"
+              type="file"
+              accept="image/*"
+              {...register("photo", { required: true })}
+              className="file-input file-input-bordered w-full mt-2 rounded-xl"
             />
           </div>
 
           {/* Email */}
 
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium">
               Email
             </label>
 
             <input
               type="email"
               placeholder="Enter your email"
-              {...register("email")}
+              {...register("email", { required: true })}
               className="input input-bordered w-full mt-2 rounded-xl"
             />
           </div>
@@ -85,23 +111,27 @@ const Register = () => {
           {/* Password */}
 
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium">
               Password
             </label>
 
             <div className="relative mt-2">
-
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
-                {...register("password")}
-                className="input input-bordered w-full rounded-xl pr-12"
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                })}
+                className="input input-bordered w-full pr-12 rounded-xl"
               />
 
               <button
                 type="button"
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
               >
                 {showPassword ? (
                   <FaEyeSlash />
@@ -109,35 +139,27 @@ const Register = () => {
                   <FaEye />
                 )}
               </button>
-
             </div>
           </div>
 
-          {/* Register Button */}
-
-          <button className="btn btn-primary w-full rounded-xl mt-2">
+          <button className="btn btn-primary w-full rounded-xl">
             Create Account
           </button>
         </form>
 
-        <div className="divider text-xs text-gray-400 my-6">
-          OR
-        </div>
+        <div className="divider">OR</div>
 
-        {/* Google */}
+        <GoogleLogin />
 
-        <GoogleLogin></GoogleLogin>
-
-        <p className="text-center text-sm mt-6 text-gray-600">
-          Already have an account?{" "}
+        <p className="text-center mt-5">
+          Already have an account?
           <Link
+            className="text-primary font-semibold ml-2"
             to="/login"
-            className="text-primary font-semibold"
           >
             Login
           </Link>
         </p>
-
       </div>
     </div>
   );
