@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import UseAuth from "../../../Hooks/UseAuth";
+import GoogleLogin from "../SignInGoogle/GoogleLogin";
 
 const Register = () => {
   const { register, handleSubmit } = useForm();
@@ -126,10 +126,7 @@ const Register = () => {
 
         {/* Google */}
 
-        <button className="btn btn-outline w-full rounded-xl">
-          <FcGoogle size={22} />
-          Continue with Google
-        </button>
+        <GoogleLogin></GoogleLogin>
 
         <p className="text-center text-sm mt-6 text-gray-600">
           Already have an account?{" "}
