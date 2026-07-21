@@ -113,9 +113,9 @@ const Navbar = () => {
           )}
 
           {/* Rider Button */}
-          <button className="btn bg-[#CAEB66] hover:bg-lime-400 rounded-xl border-none">
+          <Link to="/rider" className="btn bg-[#CAEB66] hover:bg-lime-400 rounded-xl border-none">
             Be a Rider
-          </button>
+          </Link>
         </div>
       </div>
     </div>

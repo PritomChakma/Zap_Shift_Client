@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import UseAuth from "../../../Hooks/UseAuth";
 import GoogleLogin from "../SignInGoogle/GoogleLogin";
 
@@ -11,9 +11,13 @@ const Register = () => {
 
   const { registerUser, updateUserProfile } = UseAuth();
 
-  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+
+const location = useLocation()
+  const navigate = useNavigate();
+
+
 
   const handleRegister = async (data) => {
     try {
@@ -43,6 +47,8 @@ const Register = () => {
       console.log("Registration Successful");
 
       reset();
+      const from = location.state?.from?.pathname || "/";
+    navigate(from, { replace: true });
 
       navigate("/");
     } catch (error) {

@@ -5,6 +5,8 @@ import Login from "../Pages/Authentication/Login/Login";
 import Register from "../Pages/Authentication/Register/Register";
 import Coverage from "../Pages/Coverage/Coverage";
 import Home from "../Pages/Home/Home";
+import Rider from "../Pages/Rider/Rider";
+import PrivateRouter from "./PrivateRouter";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +23,10 @@ export const router = createBrowserRouter([
         loader: () =>
           fetch("/public/ServiceCenter.json").then((res) => res.json()),
       },
+      {
+        path: "/rider",
+        element: <PrivateRouter><Rider></Rider></PrivateRouter>
+      }
     ],
   },
 

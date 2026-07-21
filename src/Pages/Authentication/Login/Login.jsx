@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UseAuth from "../../../Hooks/UseAuth";
@@ -11,10 +11,15 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const location = useLocation()
+const navigate = useNavigate()
+const from = location.state?.from?.pathname || "/";
+
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        navigate(from, { replace: true });
       })
       .catch((err) => console.log(err));
   };
