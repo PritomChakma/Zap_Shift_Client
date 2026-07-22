@@ -7,6 +7,7 @@ import Coverage from "../Pages/Coverage/Coverage";
 import Home from "../Pages/Home/Home";
 import Rider from "../Pages/Rider/Rider";
 import PrivateRouter from "./PrivateRouter";
+import SendParcel from "../Pages/SendParcel/SendParcel";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         path: "/rider",
         element: <PrivateRouter><Rider></Rider></PrivateRouter>
+      },
+      {
+        path: "/send-parcel",
+        element: <PrivateRouter><SendParcel></SendParcel></PrivateRouter>
       }
     ],
   },
