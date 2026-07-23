@@ -2,8 +2,11 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import UseAuth from "../../Hooks/UseAuth";
 
 const SendParcel = () => {
+const {user} = UseAuth()
+
   const regionDist = useLoaderData();
   const regionDuplicate = regionDist.map((c) => c.region);
   const region = [...new Set(regionDuplicate)];
@@ -149,6 +152,7 @@ const SendParcel = () => {
                 <input
                   type="text"
                   placeholder="Sender Name"
+                      defaultValue={user?.displayName || ""}
                   {...register("senderName")}
                   className="input input-bordered w-full rounded-xl"
                 />
@@ -159,6 +163,7 @@ const SendParcel = () => {
                 <input
                   type="email"
                   placeholder="Sender Email"
+                      defaultValue={user?.email || ""}
                   {...register("senderEmail")}
                   className="input input-bordered w-full rounded-xl"
                 />

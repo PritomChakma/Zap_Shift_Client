@@ -91,7 +91,7 @@ const DashboardLayout = () => {
             </li>
 
             <li>
-              <NavLink to="/dashboard/myParcels" className={menuClass}>
+              <NavLink to="/dashboard/my-parcel" className={menuClass}>
                 <FaBoxOpen />
                 My Parcels
               </NavLink>
