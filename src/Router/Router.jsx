@@ -1,13 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "../Layouts/AuthLayout";
+import DashboardLayout from "../Layouts/DashboardLayout";
 import RootLayouts from "../Layouts/RootLayouts";
 import Login from "../Pages/Authentication/Login/Login";
 import Register from "../Pages/Authentication/Register/Register";
 import Coverage from "../Pages/Coverage/Coverage";
+import MyParcel from "../Pages/Dashboard/MyParcel/MyParcel";
 import Home from "../Pages/Home/Home";
 import Rider from "../Pages/Rider/Rider";
-import PrivateRouter from "./PrivateRouter";
 import SendParcel from "../Pages/SendParcel/SendParcel";
+import PrivateRouter from "./PrivateRouter";
 
 export const router = createBrowserRouter([
   {
@@ -26,14 +28,22 @@ export const router = createBrowserRouter([
       },
       {
         path: "/rider",
-        element: <PrivateRouter><Rider></Rider></PrivateRouter>
+        element: (
+          <PrivateRouter>
+            <Rider></Rider>
+          </PrivateRouter>
+        ),
       },
       {
         path: "/send-parcel",
-        element: <PrivateRouter><SendParcel></SendParcel></PrivateRouter>,
+        element: (
+          <PrivateRouter>
+            <SendParcel></SendParcel>
+          </PrivateRouter>
+        ),
         loader: () =>
           fetch("/public/ServiceCenter.json").then((res) => res.json()),
-      }
+      },
     ],
   },
 
@@ -48,6 +58,21 @@ export const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+    ],
+  },
+
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRouter>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRouter>
+    ),
+    children: [
+      {
+        path:"my-parcel",
+        Component: MyParcel,
       },
     ],
   },
