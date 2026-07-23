@@ -1,5 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SendParcel = () => {
   const regionDist = useLoaderData();
@@ -8,10 +9,6 @@ const SendParcel = () => {
   // console.log(region);
 
   const { register, handleSubmit, control } = useForm();
-
-  const handleParcelSubmit = (data) => {
-    console.log(data);
-  };
 
   const senderRegion = useWatch({
     control,
@@ -27,7 +24,60 @@ const SendParcel = () => {
     return district;
   };
 
-  console.log(districtByRegion);
+  const handleParcelSubmit = (data) => {
+    const isDocument = data.parcelType === "Document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+
+    const parcelWeight = Number(data.parcelWeight || 0);
+
+    let cost = 0;
+
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight <= 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const extraWeight = parcelWeight - 3;
+
+        cost = isSameDistrict
+          ? 110 + extraWeight * 40
+          : 150 + extraWeight * 40 + 40;
+      }
+    }
+
+    Swal.fire({
+      title: "Confirm Booking",
+      html: `
+      <div style="text-align:left">
+        <p><b>Parcel:</b> ${data.parcelName}</p>
+        <p><b>Type:</b> ${data.parcelType}</p>
+        <p><b>Sender:</b> ${data.senderDistrict}</p>
+        <p><b>Receiver:</b> ${data.receiverDistrict}</p>
+        <h3 style="margin-top:15px">
+          Delivery Charge: ৳${cost}
+        </h3>
+      </div>
+    `,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Confirm Booking",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log({
+          ...data,
+          cost,
+        });
+
+        Swal.fire({
+          icon: "success",
+          title: "Booking Confirmed",
+          text: "Your parcel booking has been placed successfully.",
+        });
+      }
+    });
+  };
   return (
     <div className="max-w-7xl mx-auto bg-white rounded-2xl p-8 shadow-sm">
       {/* Heading */}
