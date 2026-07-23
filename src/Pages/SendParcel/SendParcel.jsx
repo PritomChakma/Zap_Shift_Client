@@ -1,18 +1,33 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
 
 const SendParcel = () => {
   const regionDist = useLoaderData();
   const regionDuplicate = regionDist.map((c) => c.region);
   const region = [...new Set(regionDuplicate)];
-  console.log(region);
+  // console.log(region);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, control } = useForm();
 
   const handleParcelSubmit = (data) => {
     console.log(data);
   };
 
+  const senderRegion = useWatch({
+    control,
+    name: "senderRegion",
+  });
+  const receiverRegion = useWatch({
+    control,
+    name: "receiverRegion",
+  });
+  const districtByRegion = (region) => {
+    const regionDistrict = regionDist.filter((c) => c.region === region);
+    const district = regionDistrict.map((r) => r.district);
+    return district;
+  };
+
+  console.log(districtByRegion);
   return (
     <div className="max-w-7xl mx-auto bg-white rounded-2xl p-8 shadow-sm">
       {/* Heading */}
@@ -117,13 +132,29 @@ const SendParcel = () => {
               </div>
 
               <div>
+                <label className="label">Your Region</label>
+                <select
+                  className="select select-bordered w-full rounded-xl "
+                  {...register("senderRegion")}
+                >
+                  <option>Select your Region</option>
+                  {region.map((c, i) => (
+                    <option key={i} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* your District */}
+              <div>
                 <label className="label">Your District</label>
                 <select
                   className="select select-bordered w-full rounded-xl "
                   {...register("senderDistrict")}
                 >
                   <option>Select your District</option>
-                  {region.map((c, i) => (
+                  {districtByRegion(senderRegion).map((c, i) => (
                     <option key={i} value={c}>
                       {c}
                     </option>
@@ -189,12 +220,12 @@ const SendParcel = () => {
               </div>
 
               <div>
-                <label className="label">Receiver District</label>
+                <label className="label">Receiver Region</label>
                 <select
                   className="select select-bordered w-full rounded-xl"
-                  {...register("receiverDistrict")}
+                  {...register("receiverRegion")}
                 >
-                  <option>Select your District</option>
+                  <option>Select your Region</option>
                   {region.map((c, i) => (
                     <option key={i} value={c}>
                       {c}
@@ -202,6 +233,19 @@ const SendParcel = () => {
                   ))}
                 </select>
               </div>
+
+              {/* Receiver District */}
+              <select
+                className="select select-bordered w-full rounded-xl"
+                {...register("receiverDistrict")}
+              >
+                <option>Select Receiver District</option>
+                {districtByRegion(receiverRegion).map((district, index) => (
+                  <option key={index} value={district}>
+                    {district}
+                  </option>
+                ))}
+              </select>
 
               <div>
                 <label className="label">Delivery Instruction</label>
