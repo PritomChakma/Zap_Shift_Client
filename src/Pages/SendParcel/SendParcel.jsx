@@ -1,6 +1,7 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const SendParcel = () => {
   const regionDist = useLoaderData();
@@ -9,6 +10,8 @@ const SendParcel = () => {
   // console.log(region);
 
   const { register, handleSubmit, control } = useForm();
+
+  const axiosSecure = useAxiosSecure()
 
   const senderRegion = useWatch({
     control,
@@ -65,10 +68,10 @@ const SendParcel = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log({
-          ...data,
-          cost,
-        });
+        axiosSecure.post("/parcel", data)
+        .then(res =>{
+          console.log("after Saving data", res.data);
+        })
 
         Swal.fire({
           icon: "success",
